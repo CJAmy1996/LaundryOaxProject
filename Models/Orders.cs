@@ -1,5 +1,8 @@
-﻿namespace LaundryOaxWebAPI.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace LaundryOaxWebAPI.Models
 {
+    [Keyless]
     public class Orders
     {
 

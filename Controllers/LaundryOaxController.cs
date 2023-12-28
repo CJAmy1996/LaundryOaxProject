@@ -18,8 +18,8 @@ namespace LaundryOaxWebAPI.Controllers
             laundryOaxDBContext1 = laundryOaxDBContext;
         }
 
-       
 
+        
         [HttpGet]
         [Route("orders")]
         public async Task<IActionResult> GetAllOrders()
@@ -35,6 +35,8 @@ namespace LaundryOaxWebAPI.Controllers
         var getOrder = await laundryOaxDBContext1.Customers.ToListAsync();
         return Ok(getOrder);
             }
+
+        
         [HttpPut]
         [Route("{id:Guid}")]
 
@@ -65,6 +67,9 @@ namespace LaundryOaxWebAPI.Controllers
             if (orderRequest != null)
             {
                 orderRequest.OrderId= Guid.NewGuid();
+                orderRequest.date = DateTime.UtcNow;
+
+
                 await laundryOaxDBContext1.Orders.AddAsync(orderRequest);
                 await laundryOaxDBContext1.SaveChangesAsync();
 
@@ -83,7 +88,7 @@ namespace LaundryOaxWebAPI.Controllers
             if (loginRequest != null)
             {
                 loginRequest.UserId = Guid.NewGuid();
-                //await laundryOaxDBContext1.UserLogin.AddAsync(loginRequest);
+                await laundryOaxDBContext1.UserLogin.AddAsync(loginRequest);
                 await laundryOaxDBContext1.SaveChangesAsync();
 
                 return Ok(loginRequest);
@@ -93,6 +98,7 @@ namespace LaundryOaxWebAPI.Controllers
                 return BadRequest("Invalid customer data.");
             }
         }
+        [Authorize]
         [HttpDelete]
         [Route("{id:guid}")]
 

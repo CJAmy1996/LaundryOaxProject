@@ -1,5 +1,6 @@
 using LaundryOaxWebAPI.Controllers;
 using LaundryOaxWebAPI.Data;
+using LaundryOaxWebAPI.Services.OrderServices;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<LaundryOaxDBContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("LaundryOaxConnectionString")));
-
+builder.Services.AddScoped<IOrderService, OrderService>();
 var CorsPolicy = "CorsPolicy";
 
 builder.Services.AddCors(opt =>

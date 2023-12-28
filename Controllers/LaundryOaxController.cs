@@ -1,5 +1,6 @@
 ﻿using LaundryOaxWebAPI.Data;
 using LaundryOaxWebAPI.Models;
+using LaundryOaxWebAPI.Services.OrderServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,18 +14,21 @@ namespace LaundryOaxWebAPI.Controllers
     {
 
         private readonly LaundryOaxDBContext laundryOaxDBContext1;
-        public LaundryOaxController(LaundryOaxDBContext laundryOaxDBContext)
+        private readonly OrderService orderService1;
+        public LaundryOaxController(LaundryOaxDBContext laundryOaxDBContext, OrderService orderService)
         {
+            orderService1 = orderService;
             laundryOaxDBContext1 = laundryOaxDBContext;
         }
-
        
 
+        
         [HttpGet]
         [Route("orders")]
         public async Task<IActionResult> GetAllOrders()
         {
             var orders = await laundryOaxDBContext1.Customers.ToListAsync();
+           
             return Ok(orders);
         }
 
@@ -35,6 +39,8 @@ namespace LaundryOaxWebAPI.Controllers
         var getOrder = await laundryOaxDBContext1.Customers.ToListAsync();
         return Ok(getOrder);
             }
+
+        
         [HttpPut]
         [Route("{id:Guid}")]
 
@@ -65,6 +71,9 @@ namespace LaundryOaxWebAPI.Controllers
             if (orderRequest != null)
             {
                 orderRequest.OrderId= Guid.NewGuid();
+                orderRequest.date = DateTime.UtcNow;
+
+
                 await laundryOaxDBContext1.Orders.AddAsync(orderRequest);
                 await laundryOaxDBContext1.SaveChangesAsync();
 
@@ -76,23 +85,8 @@ namespace LaundryOaxWebAPI.Controllers
             }
         }
        
-        [HttpPost]
-        [Route("add-users")]
-        public async Task<IActionResult> AddUsers([FromBody] UserLogin loginRequest)
-        {
-            if (loginRequest != null)
-            {
-                loginRequest.UserId = Guid.NewGuid();
-                //await laundryOaxDBContext1.UserLogin.AddAsync(loginRequest);
-                await laundryOaxDBContext1.SaveChangesAsync();
-
-                return Ok(loginRequest);
-            }
-            else
-            {
-                return BadRequest("Invalid customer data.");
-            }
-        }
+        
+        [Authorize]
         [HttpDelete]
         [Route("{id:guid}")]
 

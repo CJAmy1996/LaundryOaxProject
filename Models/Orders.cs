@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace LaundryOaxWebAPI.Models
 {
-    [Keyless]
+    
     public class Orders
     {
-
+        [Key]
         public Guid OrderId { get; set; }
         public string ServiceName { get; set; } = string.Empty;
         public string Service { get; set; } = string.Empty;

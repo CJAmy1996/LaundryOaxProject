@@ -20,9 +20,9 @@ namespace LaundryOaxWebAPI.Controllers
             orderService1 = orderService;
             laundryOaxDBContext1 = laundryOaxDBContext;
         }
+
        
 
-        
         [HttpGet]
         [Route("orders")]
         public async Task<IActionResult> GetAllOrders()
@@ -85,8 +85,23 @@ namespace LaundryOaxWebAPI.Controllers
             }
         }
        
-        
-        [Authorize]
+        [HttpPost]
+        [Route("add-users")]
+        public async Task<IActionResult> AddUsers([FromBody] UserLogin loginRequest)
+        {
+            if (loginRequest != null)
+            {
+                loginRequest.UserId = Guid.NewGuid();
+                //await laundryOaxDBContext1.UserLogin.AddAsync(loginRequest);
+                await laundryOaxDBContext1.SaveChangesAsync();
+
+                return Ok(loginRequest);
+            }
+            else
+            {
+                return BadRequest("Invalid customer data.");
+            }
+        }
         [HttpDelete]
         [Route("{id:guid}")]
 

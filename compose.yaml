@@ -1,0 +1,17 @@
+# Production-shaped local container: configure a real OIDC issuer and shared SQL database.
+services:
+  api:
+    build: .
+    ports: ["127.0.0.1:8080:8080"]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Auth__Authority: ${OIDC_AUTHORITY:?Set OIDC_AUTHORITY}
+      Auth__Audience: ${OIDC_AUDIENCE:?Set OIDC_AUDIENCE}
+      Auth__ClientId: ${OIDC_CLIENT_ID:?Set OIDC_CLIENT_ID}
+      Fleet__Provider: SqlServer
+      ConnectionStrings__Fleet: ${FLEET_CONNECTION_STRING:?Set FLEET_CONNECTION_STRING}
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: [no-new-privileges:true]
+    cap_drop: [ALL]
+    restart: unless-stopped

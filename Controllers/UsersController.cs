@@ -1,4 +1,4 @@
-﻿using LaundryOaxWebAPI.Data;
+using LaundryOaxWebAPI.Data;
 using LaundryOaxWebAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +12,7 @@ namespace LaundryOaxWebAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly LaundryOaxDBContext laundryOaxDBContext1;
+        public UsersController(LaundryOaxDBContext db) { laundryOaxDBContext1 = db; }
 
         [HttpPost]
         [Route("add-users")]

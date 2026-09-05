@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# IoT local data and generated artifacts
+*.db
+*.db-shm
+*.db-wal
+client/dist/
+client/.angular/
+wwwroot/
+.env
+*.tfstate*
+.terraform/
+*.tfvars

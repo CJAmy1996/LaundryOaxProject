@@ -1,25 +1,22 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+FROM node:22-bookworm-slim AS web
+WORKDIR /src/client
+COPY client/package*.json ./
+RUN npm ci --no-fund
+COPY client/ ./
+RUN npm run build
 
-#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
-#For more information, please see https://aka.ms/containercompat
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["LaundryOaxWebAPI.csproj", "."]
-RUN dotnet restore "./LaundryOaxWebAPI.csproj"
-COPY . .
-WORKDIR "/src/."
-RUN dotnet build "LaundryOaxWebAPI.csproj" -c Release -o /app/build
+COPY LaundryOaxWebAPI.csproj ./
+RUN dotnet restore LaundryOaxWebAPI.csproj
+COPY . ./
+COPY --from=web /src/wwwroot ./wwwroot
+RUN dotnet publish LaundryOaxWebAPI.csproj -c Release -o /app/publish --no-restore /p:UseAppHost=false
 
-FROM build AS publish
-RUN dotnet publish "LaundryOaxWebAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish ./
+USER $APP_UID
+ENV ASPNETCORE_HTTP_PORTS=8080
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "LaundryOaxWebAPI.dll"]

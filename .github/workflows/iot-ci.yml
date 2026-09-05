@@ -1,0 +1,34 @@
+name: IoT build and reliability
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - run: dotnet test tests/LaundryOax.Tests.csproj -c Release --logger trx
+      - run: dotnet build edge/LaundryOax.Edge.csproj -c Release
+      - run: npm ci && npm run build
+        working-directory: client
+      - run: npm audit --audit-level=high
+        working-directory: client
+      - run: dotnet list LaundryOaxWebAPI.csproj package --vulnerable --include-transitive
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform init -backend=false && terraform validate
+        working-directory: infra
+      - run: docker build -t laundryoax:ci .
+      - uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: laundryoax:ci
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: '1'

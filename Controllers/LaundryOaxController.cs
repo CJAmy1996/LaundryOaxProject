@@ -1,4 +1,4 @@
-﻿using LaundryOaxWebAPI.Data;
+using LaundryOaxWebAPI.Data;
 using LaundryOaxWebAPI.Models;
 using LaundryOaxWebAPI.Services.OrderServices;
 using Microsoft.AspNetCore.Authorization;
@@ -14,8 +14,8 @@ namespace LaundryOaxWebAPI.Controllers
     {
 
         private readonly LaundryOaxDBContext laundryOaxDBContext1;
-        private readonly OrderService orderService1;
-        public LaundryOaxController(LaundryOaxDBContext laundryOaxDBContext, OrderService orderService)
+        private readonly IOrderService orderService1;
+        public LaundryOaxController(LaundryOaxDBContext laundryOaxDBContext, IOrderService orderService)
         {
             orderService1 = orderService;
             laundryOaxDBContext1 = laundryOaxDBContext;

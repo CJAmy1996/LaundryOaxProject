@@ -92,4 +92,3 @@ The IoT rule uses the documented standard SQS action: https://docs.aws.amazon.co
 ## Interview preparation
 
 See [the interview study pack](docs/interviews/README.md) for 173 questions, an accurate resume claim audit, architecture evidence, operational runbooks, and a printable study guide.
-

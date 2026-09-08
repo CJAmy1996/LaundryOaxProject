@@ -26,7 +26,7 @@ jobs:
       - run: terraform init -backend=false && terraform validate
         working-directory: infra
       - run: docker build -t laundryoax:ci .
-      - uses: aquasecurity/trivy-action@0.28.0
+      - uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: laundryoax:ci
           severity: CRITICAL,HIGH

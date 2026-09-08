@@ -88,3 +88,8 @@ The IoT rule uses the documented standard SQS action: https://docs.aws.amazon.co
 - Notifications are in-app and persistent. SMS, email, push-provider delivery, billing, real sensor drivers, and MQTT downstream receipt transport are not implemented.
 - Legacy business controllers are disabled by default (`Legacy__Enabled=false`); explicitly enabling them still restricts access to `Admin` and retain the original single-tenant schema. They are **not** the multi-tenant fleet API. Existing placeholder business/auth endpoints and payment logic are not production features; do not expose them to tenant users. OrderService's broken references were replaced with validated EF persistence, not a pretend payment processor.
 - SQL Server multi-replica contention, real AWS delivery, OIDC integration, and container deployment require integration testing in your environment. Local automated tests exercise SQLite and test-only authenticated identities, not an external issuer.
+
+## Interview preparation
+
+See [the interview study pack](docs/interviews/README.md) for 173 questions, an accurate resume claim audit, architecture evidence, operational runbooks, and a printable study guide.
+

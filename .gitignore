@@ -372,3 +372,6 @@ wwwroot/
 *.tfstate*
 .terraform/
 *.tfvars
+
+# Local documentation
+/docs/
